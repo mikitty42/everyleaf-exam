@@ -11,12 +11,12 @@
   <% end %>
   <div class="task_title">
     <%= t('form.title') %>
-    <%= form.text_field :title %>
+    <%= form.text_field :title,id: 'task_title' %>
   </div>
   <div class="task_content">
-    <%= t('form.content') %>
-    <%= form.text_field :content %>
+    <%=  t('form.content') %>
+    <%= form.text_field :content,id: 'task_content' %>
   </div>
-  <%= form.submit "登録" %>
+  <%= form.submit %>
 <% end %>
 <%= link_to "タスク一覧画面にもどる", tasks_path %>
