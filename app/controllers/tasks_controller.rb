@@ -3,7 +3,11 @@ class TasksController < ApplicationController
 
 
   def index
-    @tasks = Task.all.order(created_at: :desc)
+    if params[:sort_expired]
+      @tasks = Task.all.order(limit_date: :desc)
+    else
+      @tasks = Task.all.order(created_at: :desc)
+    end
   end
 
   def new
