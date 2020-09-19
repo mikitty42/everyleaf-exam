@@ -17,6 +17,10 @@
     <%=  t('form.content') %>
     <%= form.text_field :content,id: 'task_content' %>
   </div>
+  <div class='task_limit_date'>
+    <%= t('form.limit_date') %>
+    <%= form.date_field :limit_date %>
+  </div>
   <%= form.submit %>
 <% end %>
 <%= link_to "タスク一覧画面にもどる", tasks_path %>

@@ -2,4 +2,5 @@
 <%= notice %>
 <p>タイトル: <%= @task.title %></p>
 <p>内容: <%= @task.content %></p>
+<p>終了期限:<%= @task.limit_date %></p>
 <%= link_to 'タスク一覧に戻る',tasks_path %>
