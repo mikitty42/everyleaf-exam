@@ -19,7 +19,7 @@
   </div>
   <div class='task_limit_date'>
     <%= t('form.limit_date') %>
-    <%= form.date_field :limit_date %>
+    <%= form.date_select :limit_date,id: 'task_limit_date' %>
   </div>
   <%= form.submit %>
 <% end %>
