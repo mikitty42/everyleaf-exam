@@ -21,6 +21,10 @@
     <%= t('form.limit_date') %>
     <%= form.date_select :limit_date,id: 'task_limit_date' %>
   </div>
+  <div class='task_status'>
+    <%= t('form.status') %>
+    <%= form.select :status, options_for_select(Task.statuses), {prompt: "選択してください"}, class: "task-select" %>
+  </div>
   <%= form.submit %>
 <% end %>
 <%= link_to "タスク一覧画面にもどる", tasks_path %>
