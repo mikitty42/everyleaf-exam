@@ -1,6 +1,14 @@
 <h1>タスク一覧</h1>
 <%= notice %>
 <%= link_to "終了期限でソートする", tasks_path(sort_expired: "true") %>
+<div>
+  <%= form_with(url: tasks_path,method: :get,local: true) do |f| %>
+    <%= f.label :title,'タイトル検索' %>
+    <%= f.text_field :title %>
+    <%= f.select :status, options_for_select(Task.statuses), include_blank: true %>
+    <%= f.submit 'Search' %>
+  <% end %>
+</div>
 <table>
   <tr>
     <th>タイトル</th>
