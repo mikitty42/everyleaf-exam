@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(version: 2020_09_25_133030) do
     t.datetime "updated_at", null: false
     t.date "limit_date", default: "2015-10-20", null: false
     t.integer "status", default: 0, null: false
-    t.index ["status"], name: "index_tasks_on_status", unique: true
-    t.index ["title"], name: "index_tasks_on_title", unique: true
+    t.index ["status"], name: "index_tasks_on_status"
+    t.index ["title"], name: "index_tasks_on_title"
   end
 
 end
