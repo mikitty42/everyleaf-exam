@@ -62,6 +62,15 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(task_list[1]).to have_content '2020-11-12'
       end
     end
+    context '優先順位でソートするボタンを押した場合' do
+      it '優先順位の昇順で表示される' do
+        visit tasks_path
+        click_on '優先順位でソートする'
+        task_list = all('.priority_high')
+        expect(task_list[0]).to have_content '高'
+        expect(task_list[1]).to have_content '低'
+      end
+    end
   end
   describe '一覧表示機能' do
     context '一覧画面に遷移した場合' do

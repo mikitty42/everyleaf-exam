@@ -25,7 +25,7 @@
     <td><%= task.content %></td>
     <td class="date_row"><%= task.limit_date %></td>
     <td><%= task.status %></td>
-    <td><%= task.priority %></td>
+    <td class='priority_high'><%= task.priority %></td>
     <td><%= link_to '詳細を確認する', task_path(task.id) %></td>
     <td><%= link_to "タスクを編集する", edit_task_path(task.id) %></td>
     <td><%= link_to 'タスクを削除する', task_path(task.id), method: :delete ,data: { confirm: '本当に削除していいですか？' } %></td>
