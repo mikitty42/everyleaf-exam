@@ -3,7 +3,7 @@ class TasksController < ApplicationController
 
   def index
     if params[:title].present? && params[:status].present?
-      @tasks = Task.get_by_status_title params[:title],params[:status]
+      @tasks = Task.get_by_status_title(params[:title],params[:status])
     elsif params[:title].present?
         @tasks = Task.get_by_title params[:title]
     elsif params[:status].present?
@@ -11,11 +11,13 @@ class TasksController < ApplicationController
       else
         if params[:sort_expired]
           @tasks = Task.all.order(limit_date: :desc)
+        elsif params[:priority_expired]
+          @tasks = Task.all.order(priority: :asc)
         else
           @tasks = Task.all.order(created_at: :desc)
+        end
       end
     end
-  end
 
   def new
     @task = Task.new
@@ -53,7 +55,7 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title,:content,:limit_date,:status).merge(status: params[:task][:status].to_i)
+    params.require(:task).permit(:title,:content,:limit_date,:status,:priority)
   end
 
   def set_task
