@@ -2,73 +2,74 @@ require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
   describe '検索機能' do
    before do
-     FactoryBot.create(:task, title: "task")
-     FactoryBot.create(:second_task, title: "sample")
+     FactoryBot.create(:task,title: 'task')
+     FactoryBot.create(:second_task)
    end
    context 'タイトルであいまい検索をした場合' do
      it "検索キーワードを含むタスクで絞り込まれる" do
        visit tasks_path
        fill_in 'タイトル検索',with: 'task'
-       click_on 'Search'
+       click_button 'Search'
        expect(page).to have_content 'task'
      end
    end
    context 'ステータス検索をした場合' do
      it "ステータスに完全一致するタスクが絞り込まれる" do
        visit tasks_path
-       select '着手',from: 'status'
-       expect(page).to have_select('status', selected: '着手')
+       select '着手中',from: 'ステータス検索'
+       expect(page).to have_select('ステータス検索', selected: '着手中')
      end
    end
    context 'タイトルのあいまい検索とステータス検索をした場合' do
      it "検索キーワードをタイトルに含み、かつステータスに完全一致するタスク絞り込まれる" do
        visit tasks_path
        fill_in 'タイトル検索',with: 'task'
-       click_on 'Search'
-       select '着手',from: 'status'
+       select '着手中',from: 'ステータス検索'
+       click_button 'Search'
        expect(page).to have_content 'task'
-       expect(page).to have_select('status', selected: '着手')
+       expect(page).to have_select('ステータス検索', selected: '着手中')
      end
    end
  end
   describe '新規作成機能' do
     before do
-      FactoryBot.create(:task)
-      FactoryBot.create(:second_task)
+      task1 = FactoryBot.create(:task)
+      task2 = FactoryBot.create(:second_task)
     end
     context 'タスクを新規作成した場合' do
       it '作成したタスクが表示される' do
         visit new_task_path
-        fill_in 'task_title', with: 'task1'
-        fill_in 'task_content', with: 'content1'
+        fill_in 'task_title',with: 'task1'
+        fill_in 'task_content',with: 'content1'
         select '2020',from: 'task_limit_date_1i'
         select '11',from: 'task_limit_date_2i'
         select '12',from: 'task_limit_date_3i'
-        save_and_open_page
-        click_on '登録する'
+        select '着手中',from: 'task[status]'
+        select '高',from: 'task[priority]'
+        click_button '登録する'
         expect(page).to have_content 'task1'
         expect(page).to have_content 'content1'
         expect(page).to have_content '2020'
         expect(page).to have_content '11'
         expect(page).to have_content '12'
+        expect(page).to have_content '着手中'
+        expect(page).to have_content '高'
       end
     end
     context '終了期限でソートするボタンを押した場合' do
       it '終了期限の降順で表示される' do
         visit tasks_path
-        click_on '終了期限でソートする'
+        click_link '終了期限でソートする'
         task_list = all('.date_row')
         expect(task_list[0]).to have_content '2020-11-13'
-        expect(task_list[1]).to have_content '2020-11-12'
       end
     end
     context '優先順位でソートするボタンを押した場合' do
       it '優先順位の昇順で表示される' do
         visit tasks_path
-        click_on '優先順位でソートする'
+        click_link '優先順位でソートする'
         task_list = all('.priority_high')
         expect(task_list[0]).to have_content '高'
-        expect(task_list[1]).to have_content '低'
       end
     end
   end
