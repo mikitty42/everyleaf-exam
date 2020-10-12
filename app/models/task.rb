@@ -10,6 +10,6 @@ class Task < ApplicationRecord
 
     scope :get_by_title, -> (title) { where('title LIKE ?', "%#{title}%")}
     scope :get_by_status, -> (status) { where(status: status)}
-    scope :get_by_title_status, -> (title,status) { where('title LIKE ?', "%#{title}%").where(status: status)}
+    
 
 end

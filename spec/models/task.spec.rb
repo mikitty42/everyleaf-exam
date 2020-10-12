@@ -1,30 +1,23 @@
 require 'rails_helper'
 RSpec.describe 'タスクモデル機能', type: :model do
+    before do
+    FactoryBot.create(:task)
+    FactoryBot.create(:second_task)
+  end
   describe '検索機能' do
-    @task = FactoryBot.create(:task, title: 'task')
-    @task1 = FactoryBot.create(:second_task, title: "sample")
     context 'scopeメソッドでタイトルのあいまい検索をした場合' do
       it "検索キーワードを含むタスクが絞り込まれる" do
-        expect(Task.title_like('task')).to include(task)
-        expect(Task.title_like('task')).not_to include(second_task)
-        expect(Task.title_like('task').count).to eq 1
+        expect(Task.get_by_title('task1').count).to eq 1
       end
     end
     context 'scopeメソッドでステータス検索をした場合' do
       it "ステータスに完全一致するタスクが絞り込まれる" do
-        expect(Task.status_is('着手中')).to include(task)
-        expect(Task.status_is('完了')).not_to include(second_task)
-        expect(Task.status_is('着手中').count).to eq 1
+        expect(Task.get_by_status('完了').count).to eq 2
       end
     end
     context 'scopeメソッドでタイトルのあいまい検索とステータス検索をした場合' do
       it "検索キーワードをタイトルに含み、かつステータスに完全一致するタスク絞り込まれる" do
-        expect(Task.title_like('task')).to include(task)
-        expect(Task.title_like('task')).not_to include(second_task)
-        expect(Task.title_like('task').count).to eq 1
-        expect(Task.status_is('着手中')).to include(task)
-        expect(Task.status_is('完了')).not_to include(second_task)
-        expect(Task.status_is('着手中').count).to eq 1
+        expect(Task.get_by_title('task1').get_by_status('完了').count).to eq 1
       end
     end
   end
