@@ -3,11 +3,11 @@
 <%= link_to "終了期限でソートする", tasks_path(sort_expired: "true") %>
 <%= link_to "優先順位でソートする", tasks_path(priority_expired: "true") %>
 <div>
-  <%= form_with(scope: :search,url:tasks_path,local: true,method: :get) do |f| %>
+  <%= form_with(url:tasks_path,local: true,method: :get) do |f| %>
     <%= f.label :title,'タイトル検索' %>
-    <%= f.text_field :title,value: @task_search_params[:title] %>
+    <%= f.text_field :title,value: params[:title] %>
     <%= f.label :status,'ステータス検索' %>
-    <%= f.select :status,Task.statuses.keys,selected: @task_search_params[:status],include_blank:"選択する" %>
+    <%= f.select :status,Task.statuses.keys,selected: params[:status],include_blank:"選択する" %>
     <%= f.submit 'Search' %>
   <% end %>
 </div>

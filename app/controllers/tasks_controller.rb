@@ -2,18 +2,21 @@ class TasksController < ApplicationController
   before_action :set_task,only: [:show,:edit,:update,:destroy]
 PER = 10
   def index
-    @task_search_params = task_search_params
-    @tasks =Task.all
-    @tasks = @tasks.search(@task_search_params)
+    @tasks = Task.page(params[:page]).per(PER)
     if params[:sort_expired]
-      @tasks = @tasks.order(limit_date: :desc)
+      @tasks = Task.order(limit_date: :desc).page(params[:page]).per(PER)
     elsif params[:priority_expired]
-      @tasks = @tasks.order(priority: :asc)
-    else
-      @tasks = @tasks.order(created_at: :desc)
+      @tasks = Task.order(priority: :asc).page(params[:page]).per(PER)
+    elsif
+      @tasks = Task.order(created_at: :desc).page(params[:page]).per(PER)
+      if params[:title].present? && params[:status].present?
+        @tasks = Task.get_by_title_status(params[:title],params[:status]).page(params[:page]).per(PER)
+      elsif params[:title].present?
+        @tasks = Task.get_by_title(params[:title]).page(params[:page]).per(PER)
+      elsif params[:status].present?
+        @tasks = Task.get_by_status(params[:status]).page(params[:page]).per(PER)
+      end
     end
-
-    @tasks = @tasks.page(params[:page]).per(PER)
   end
 
   def new
@@ -57,9 +60,5 @@ PER = 10
 
   def set_task
     @task = Task.find(params[:id])
-  end
-
-  def task_search_params
-    params.fetch(:search, {}).permit(:title, :content, :status, :priority, :limit_date)
   end
 end

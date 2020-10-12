@@ -62,6 +62,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         click_link '終了期限でソートする'
         task_list = all('.date_row')
         expect(task_list[0]).to have_content '2020-11-13'
+        expect(task_list[1]).to have_content '2019-11-12'
       end
     end
     context '優先順位でソートするボタンを押した場合' do
@@ -70,6 +71,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         click_link '優先順位でソートする'
         task_list = all('.priority_high')
         expect(task_list[0]).to have_content '高'
+        expect(task_list[1]).to have_content '低'
       end
     end
   end
