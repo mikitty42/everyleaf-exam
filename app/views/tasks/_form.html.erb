@@ -17,6 +17,18 @@
     <%=  t('form.content') %>
     <%= form.text_field :content,id: 'task_content' %>
   </div>
+  <div class='task_limit_date'>
+    <%= t('form.limit_date') %>
+    <%= form.date_select :limit_date,id: 'task_limit_date' %>
+  </div>
+  <div class='task_status'>
+    <%= t('form.status') %>
+    <%= form.select :status, options_for_select(Task.statuses.keys), {prompt: "選択してください"} %>
+  </div>
+  <div class='task_priority'>
+    <%= t('form.priority') %>
+    <%= form.select :priority, options_for_select(Task.priorities.keys), {prompt: "選択してください"}  %>
+  </div>
   <%= form.submit %>
 <% end %>
-<%= link_to "タスク一覧画面にもどる", tasks_path %>
+<%= link_to "タスク一覧画面にもどる", tasks_path,class:'btn btn-danger' %>

@@ -2,4 +2,7 @@
 <%= notice %>
 <p>タイトル: <%= @task.title %></p>
 <p>内容: <%= @task.content %></p>
-<%= link_to 'タスク一覧に戻る',tasks_path %>
+<p>終了期限:<%= @task.limit_date %></p>
+<p>ステータス:<%= @task.status %></p>
+<p>優先度:<%= @task.priority %></p>
+<%= link_to 'タスク一覧に戻る',tasks_path,class: 'btn btn-info' %>
