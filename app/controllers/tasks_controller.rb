@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
   before_action :set_task,only: [:show,:edit,:update,:destroy]
-  before_action :logged_in_user, only:[:index]
-  before_action :authenticate_user,only: [:index]
+  before_action :logged_in_user,only:[:index]
+
 
 PER = 10
   def index
@@ -66,12 +66,5 @@ PER = 10
 
   def set_task
     @task = Task.find(params[:id])
-  end
-
-  def authenticate_user
-    if @current_user == nil
-      flash[:notice] = 'ログインが必要です'
-      redirect_to new_session_path
-    end
   end
 end

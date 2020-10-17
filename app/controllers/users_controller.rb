@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   before_action :login_prohibited,only: [:new,:create]
+  before_action :correct_user,only:[:show]
+
 
   def new
     @user = User.new
