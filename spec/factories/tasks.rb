@@ -5,6 +5,7 @@ FactoryBot.define do
     limit_date { '2020-04-01'}
     priority { '高' }
     status {'完了'}
+    user
   end
   factory :second_task, class: Task do
     title { 'task2' }
@@ -12,5 +13,6 @@ FactoryBot.define do
     limit_date { '2020-04-02'}
     priority { '中' }
     status {'完了'}
+    user
   end
 end

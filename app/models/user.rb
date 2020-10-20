@@ -3,7 +3,21 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum: 255 },
                     format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }
                     before_validation { email.downcase! }
-  has_many :tasks
+  has_many :tasks,dependent: :destroy
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }
+  before_destroy :admin_exist_check
+  before_update :admin_update_exist
+  private
+
+  def admin_exist_check
+    if User.where(admin: true).count <= 1 && self.admin == true
+      throw(:abort)
+    end
+  end
+  def admin_update_exist
+    if User.where(admin: true).count == 1 && self.admin == false
+      throw(:abort)
+    end
+  end
 end

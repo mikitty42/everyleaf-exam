@@ -1,9 +1,5 @@
-5.times do |index|
-  no = index + 1
-  user = User.create(
-    name:           "user_#{no}",
-    email:  "email_#{no}@example.com",
-    password:               "#{no}password#{no}",
-  )
-  user.save!
-end
+User.create!(name:  "管理者",
+             email: "admin@example.jp",
+             password:  "11111111",
+             password_confirmation: "11111111",
+             admin: true)
