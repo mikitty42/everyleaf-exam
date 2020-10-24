@@ -5,18 +5,23 @@ class User < ApplicationRecord
                     before_validation { email.downcase! }
   has_many :tasks,dependent: :destroy
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }
-  before_destroy :admin_exist_check
-  before_update :admin_update_exist
+  validates :password, presence: true, on: :create
+  validates :password, length: { maximum: 30 }, allow_blank: true, on: :update
+  before_destroy :destroy_action
+  before_update :update_action
+
   private
 
-  def admin_exist_check
-    if User.where(admin: true).count <= 1 && self.admin == true
+  def destroy_action
+    if User.where(admin: true).count == 1 && self.admin
       throw(:abort)
     end
   end
-  def admin_update_exist
-    if User.where(admin: true).count == 1 && self.admin == false
+
+  def update_action
+    user = User.where(id: self.id).where(admin: true)
+    if User.where(admin: true).count == 1 && user.present? && self.admin == false
+      errors.add(:admin, 'から外せません。最低一人の管理者が必要です')
       throw(:abort)
     end
   end

@@ -1,34 +1,25 @@
-<%= form_with(model: [:admin,@user], local: true) do |form| %>
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= @user.errors.count %>件のエラーがあります。</h2>
-      <ul>
-      <% @user.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-  <div class="user_name">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
-  <div class="user_email">
-    <%= form.label :email %>
-    <%= form.text_field :email %>
-  </div>
-  <div class="form_check">
-    <%= form.label :admin %>
-    <%= form.check_box :admin %>
-  </div>
-  <div class="user_password">
-    <%= form.label :password %>
-    <%= form.password_field :password %>
-  </div>
-  <div class="password_confirmation">
-    <%= form.label :password_confirmation %>
-    <%= form.password_field :password_confirmation %>
-  </div>
-  <%= form.submit %>
+<%= form_with(model: [:admin, @user], local: true) do |f| %>
+  <%= render 'common/error', variable: @user %>
+  <table>
+    <tr>
+      <td><%= f.label :name, '名前' %></td>
+      <td><%= f.text_field :name %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :email, 'メールアドレス' %></td>
+      <td><%= f.email_field :email %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :password, 'パスワード' %></td>
+      <td><%= f.password_field :password %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :password_confirmation, 'パスワード確認' %></td>
+      <td><%= f.password_field :password_confirmation %></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><%= f.submit '登録' %></td>
+    <tr>
+  </table>
 <% end %>
-<%= link_to 'ユーザー一覧に戻る',admin_users_path,class: 'btn btn-primary' %>

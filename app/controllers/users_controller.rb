@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
-  before_action :login_prohibited,only: [:new,:create]
-  before_action :correct_user,only:[:show]
-
+  before_action :logged_in,only: [:new,:create]
+  before_action :not_logged_in,only:[:show]
+  before_action :forget_user,only: [:show]
+  PER = 10
 
   def new
     @user = User.new
@@ -10,9 +11,8 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      flash[:notice] = "ユーザー登録が完了しました"
-      log_in @user
-      redirect_to @user
+      session[:user_id] = @user.id
+      redirect_to root_path
     else
       render :new
     end
@@ -20,6 +20,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @tasks = @user.tasks.all
   end
 
     private
@@ -28,8 +29,11 @@ class UsersController < ApplicationController
       params.require(:user).permit(:name,:email,:password,:password_confirmation)
     end
 
-    def login_prohibited
-     !logged_in? || redirect_to(root_path)
-     flash[:notice] = '権限がありません'
+    def forget_user
+      if current_user.admin == false
+        if current_user.id != params[:id].to_i
+          redirect_to root_path
+        end
+      end
     end
   end

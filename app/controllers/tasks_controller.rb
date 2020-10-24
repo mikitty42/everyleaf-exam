@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :set_task,only: [:show,:edit,:update,:destroy]
-  before_action :logged_in_user,only:[:index]
+  before_action :not_logged_in
 
 
 PER = 10
