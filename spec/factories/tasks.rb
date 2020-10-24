@@ -15,4 +15,12 @@ FactoryBot.define do
     status {'完了'}
     user_id { 1 }
   end
+  factory :third_task, class: Task do
+    title { 'Factoryで作ったデフォルトのタイトル3' }
+    content { 'Factoryで作ったデフォルトのコンテント3' }
+    limit_date { DateTime.now + 2 }
+    priority { '低' }
+    status { '完了' }
+    user_id { 1 }
+  end
 end
