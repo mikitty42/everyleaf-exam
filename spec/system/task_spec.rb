@@ -1,10 +1,20 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
-  before do
-    FactoryBot.create(:task)
-    FactoryBot.create(:second_task)
+  def user_login
+    visit new_session_path
+    fill_in 'session[email]', with: 'sample@example.com'
+    fill_in 'session[password]', with: '00000000'
+    click_button 'ログイン'
   end
-
+  before do
+    @user = FactoryBot.create(:user)
+    @admin_user = FactoryBot.create(:admin_user)
+    user_login
+  end
+  before do
+    @task = FactoryBot.create(:task, title: 'task')
+    @task2 = FactoryBot.create(:second_task, title: 'task2')
+  end
   describe '優先順位での並び変え' do
     context '優先順位でソートするボタンを押した場合' do
       it '優先順位の昇順で表示される' do
@@ -80,8 +90,8 @@ RSpec.describe 'タスク管理機能', type: :system do
     context '一覧画面に遷移した場合' do
       it '作成済みのタスク一覧が表示される' do
         visit tasks_path
-        expect(page).to have_content 'task1'
         expect(page).to have_content 'task2'
+        expect(page).to have_content 'task'
       end
     end
     context 'タスクが作成日時の降順に並んでいる場合' do
@@ -89,7 +99,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         visit tasks_path
         task_list = all('.task_row')
         expect(task_list[0]).to have_content 'task2'
-        expect(task_list[1]).to have_content 'task1'
+        expect(task_list[1]).to have_content 'task'
       end
     end
   end
