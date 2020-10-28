@@ -9,7 +9,8 @@
     <%= form.label :status,'ステータス検索' %>
     <%= form.select :status,Task.statuses.keys,selected: params[:status],include_blank:"選択する" %>
     <%= form.hidden_field :search, value: 'true' %>
-    <%= form.submit 'Search' %>
+    <%= form.select("label_id", Label.pluck(:name, :id), { include_blank: true }) %>
+    <%= form.submit 'Search', name: nil %>
   <% end %>
 </div>
 <table class="table table-striped">
@@ -17,8 +18,9 @@
     <th>タイトル</th>
     <th>内容</th>
     <th>終了期限</th>
-    <th>ステータス</th>
     <th>優先順位</th>
+    <th>ステータス</th>
+    <th>ラベル</th>
     <th>投稿者</th>
   </tr>
 <% @tasks.each do |task| %>
@@ -32,6 +34,11 @@
     <td><%= link_to '詳細', task_path(task.id),class: 'btn btn-primary' %></td>
     <td><%= link_to "編集", edit_task_path(task.id),class: 'btn btn-success' %></td>
     <td><%= link_to '削除', task_path(task.id), method: :delete ,data: { confirm: '本当に削除していいですか？' },class: 'btn btn-info' %></td>
+    <td>
+      <% task.labels.each do |label| %>
+        <%= label.name %>
+      <% end %>
+    </td>
   </tr>
 <% end %>
 </table>

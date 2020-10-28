@@ -17,13 +17,13 @@ PER = 10
       if params[:title].present? && params[:status].present?
         @tasks = current_user.tasks.get_by_title(params[:title]).get_by_status(params[:status]).page(params[:page]).per(PER)
       elsif params[:title].present?
-          @tasks = current_user.tasks.get_by_title(params[:title]).page(params[:page]).per(PER)
+        @tasks = current_user.tasks.get_by_title(params[:title]).page(params[:page]).per(PER)
       elsif params[:status].present?
-          @tasks = current_user.tasks.get_by_status(params[:status]).page(params[:page]).per(PER)
+        @tasks = current_user.tasks.get_by_status(params[:status]).page(params[:page]).per(PER)
       end
     end
+    @tasks = @tasks.joins(:labels).where(labels: { id: params[:label_id] }) if params[:label_id].present?
   end
-
 
   def new
     @task = Task.new
@@ -61,7 +61,7 @@ PER = 10
   private
 
   def task_params
-    params.require(:task).permit(:title,:content,:limit_date,:status,:priority)
+    params.require(:task).permit(:title,:content,:limit_date,:status,:priority,{ label_ids: [] })
   end
 
   def set_task

@@ -1,20 +1,19 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
-  def user_login
-    visit new_session_path
-    fill_in 'session[email]', with: 'sample@example.com'
-    fill_in 'session[password]', with: '00000000'
-    click_button 'ログイン'
-  end
   before do
     @user = FactoryBot.create(:user)
     @admin_user = FactoryBot.create(:admin_user)
-    user_login
+    @label1 = FactoryBot.create(:label1)
+    @label2 = FactoryBot.create(:label2)
+    FactoryBot.create(:task, user: @user)
+    FactoryBot.create(:second_task, user: @user)
+
+    visit new_session_path
+    fill_in 'session[email]', with: @user.email
+    fill_in 'session[password]', with: @user.password
+    click_button 'ログイン'
   end
-  before do
-    @task = FactoryBot.create(:task, title: 'task')
-    @task2 = FactoryBot.create(:second_task, title: 'task2')
-  end
+
   describe '優先順位での並び変え' do
     context '優先順位でソートするボタンを押した場合' do
       it '優先順位の昇順で表示される' do
@@ -36,6 +35,14 @@ RSpec.describe 'タスク管理機能', type: :system do
        expect(page).to have_content 'task'
      end
    end
+   context 'ラベル検索をした場合' do
+     it "ラベル検索ができる" do
+       visit root_path
+        select 'label1', from: 'label_id'
+        click_on 'Search'
+        expect(page).to have_content 'label1'
+      end
+    end
    context 'ステータス検索をした場合' do
      it "ステータスに完全一致するタスクが絞り込まれる" do
        visit tasks_path
@@ -65,7 +72,8 @@ RSpec.describe 'タスク管理機能', type: :system do
         select '12',from: 'task_limit_date_3i'
         select '着手中',from: 'task[status]'
         select '高',from: 'task[priority]'
-        click_button '登録する'
+        check 'label1'
+        click_button '登録'
         expect(page).to have_content 'task1'
         expect(page).to have_content 'content1'
         expect(page).to have_content '2020'
@@ -73,6 +81,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(page).to have_content '12'
         expect(page).to have_content '着手中'
         expect(page).to have_content '高'
+        expect(page).to have_content 'label1'
       end
     end
     context '終了期限でソートするボタンを押した場合' do
@@ -106,10 +115,10 @@ RSpec.describe 'タスク管理機能', type: :system do
   describe '詳細表示機能' do
      context '任意のタスク詳細画面に遷移した場合' do
        it '該当タスクの内容が表示される' do
-         @task = FactoryBot.create(:task,title: 'task1',content: 'content1')
-         visit task_path(@task)
-         expect(page).to have_content 'task1'
-         expect(page).to have_content 'content1'
+         task = FactoryBot.create(:task,title: 'task2',content: 'content2',user: @user)
+         visit task_path(task.id)
+         expect(page).to have_content 'task2'
+         expect(page).to have_content 'content2'
        end
      end
   end
