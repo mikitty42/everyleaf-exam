@@ -20,8 +20,8 @@
     <th>終了期限</th>
     <th>優先順位</th>
     <th>ステータス</th>
-    <th>ラベル</th>
     <th>投稿者</th>
+    <th>ラベル</th>
   </tr>
 <% @tasks.each do |task| %>
   <tr>
@@ -31,14 +31,15 @@
     <td class="priority_high"><%= task.priority %></td>
     <td><%= task.status %></td>
     <td><%= task.user.name %></td>
-    <td><%= link_to '詳細', task_path(task.id),class: 'btn btn-primary' %></td>
-    <td><%= link_to "編集", edit_task_path(task.id),class: 'btn btn-success' %></td>
-    <td><%= link_to '削除', task_path(task.id), method: :delete ,data: { confirm: '本当に削除していいですか？' },class: 'btn btn-info' %></td>
     <td>
       <% task.labels.each do |label| %>
         <%= label.name %>
       <% end %>
     </td>
+    <td><%= link_to '詳細', task_path(task.id),class: 'btn btn-primary' %></td>
+    <td><%= link_to "編集", edit_task_path(task.id),class: 'btn btn-success' %></td>
+    <td><%= link_to '削除', task_path(task.id), method: :delete ,data: { confirm: '本当に削除していいですか？' },class: 'btn btn-info' %></td>
+
   </tr>
 <% end %>
 </table>
